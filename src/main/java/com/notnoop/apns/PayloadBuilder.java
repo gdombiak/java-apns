@@ -30,12 +30,13 @@
  */
 package com.notnoop.apns;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.notnoop.apns.internal.Utilities;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.notnoop.apns.internal.Utilities;
 
 /**
  * Represents a builder for constructing Payload requests, as
@@ -259,6 +260,19 @@ public final class PayloadBuilder {
      */
     public PayloadBuilder instantDeliveryOrSilentNotification() {
         aps.put("content-available", 1);
+        return this;
+    }
+
+    /**
+     * In order for the push notification to get picked up by UNNotificationServiceExtension, the
+     * aps dictionary must include 'mutable-content' key with value set to 1.
+     *
+     * @see <a href="https://developer.apple.com/reference/usernotifications/unnotificationserviceextension">UNNotificationServiceExtension</a>
+     *
+     * @return this
+     */
+    public PayloadBuilder mutableContent() {
+        aps.put("mutable-content", 1);
         return this;
     }
 
